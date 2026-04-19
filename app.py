@@ -274,9 +274,9 @@ st.subheader("🤖 Budget Advisor")
 st.caption("Powered by Claude. Personalised tips based on your trip breakdown.")
 
 if st.button("Get personalised advice", type="secondary"):
-    api_key = os.getenv("ANTHROPIC_API_KEY")
+    api_key = os.getenv("GROQ_API_KEY")
     if not api_key:
-        st.error("ANTHROPIC_API_KEY not set in your .env file.")
+        st.error("GROQ_API_KEY not set in your .env file.")
     else:
         from llm_advisor import build_context, get_advice
 
