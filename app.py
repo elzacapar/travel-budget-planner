@@ -23,6 +23,42 @@ TIER_OPTIONS = ["Budget", "Mid", "Comfort"]
 TIER_MAP     = {"Budget": "budget", "Mid": "mid", "Comfort": "comfort"}
 CONTINGENCY  = 0.12
 
+REGIONS = {
+    "Western Europe": [
+        "Paris", "London", "Amsterdam", "Barcelona", "Madrid", "Rome", "Milan",
+        "Berlin", "Vienna", "Lisbon", "Athens", "Dublin", "Brussels", "Zurich",
+        "Geneva", "Copenhagen", "Stockholm", "Oslo", "Helsinki", "Porto"
+    ],
+    "Eastern Europe": [
+        "Prague", "Budapest", "Warsaw", "Krakow", "Bucharest", "Sofia",
+        "Belgrade", "Zagreb", "Tallinn", "Riga", "Vilnius", "Ljubljana"
+    ],
+    "Southeast Asia": [
+        "Bangkok", "Kuala Lumpur", "Singapore", "Bali", "Ho Chi Minh City",
+        "Hanoi", "Jakarta", "Manila", "Chiang Mai", "Phuket", "Phnom Penh",
+        "Siem Reap"
+    ],
+    "East Asia": [
+        "Tokyo", "Hong Kong", "Seoul", "Osaka", "Macau", "Beijing",
+        "Shanghai", "Taipei", "Kyoto"
+    ],
+    "Middle East & Turkey": [
+        "Istanbul", "Dubai", "Antalya", "Abu Dhabi", "Tel Aviv", "Amman", "Doha"
+    ],
+    "Americas": [
+        "New York", "Los Angeles", "Mexico City", "Buenos Aires", "Rio de Janeiro",
+        "Miami", "Chicago", "San Francisco", "Cancun", "São Paulo", "Bogota",
+        "Lima", "Toronto", "Vancouver", "Montreal"
+    ],
+    "South Asia": [
+        "Mumbai", "Delhi", "Bangalore", "Colombo", "Kathmandu", "Dhaka"
+    ],
+    "Africa & Oceania": [
+        "Sydney", "Melbourne", "Auckland", "Cape Town", "Johannesburg",
+        "Nairobi", "Marrakech", "Cairo", "Casablanca"
+    ],
+}
+
 VERDICT_STYLE = {
     "Comfortable":      {"color": "#2ecc71", "icon": "✅"},
     "Tight but doable": {"color": "#f39c12", "icon": "⚠️"},
@@ -72,7 +108,8 @@ def fmt(usd_amount: float, currency: str, rate: float) -> str:
 with st.sidebar:
     st.title("✈️ Trip Details")
 
-    city   = st.selectbox("Destination", cities)
+    region = st.selectbox("Region", list(REGIONS.keys()))
+    city   = st.selectbox("City", sorted(REGIONS[region]))
     days   = st.number_input("Number of days",   min_value=1,  max_value=365, value=7)
     people = st.number_input("Number of people", min_value=1,  max_value=20,  value=1)
 
