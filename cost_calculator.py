@@ -10,7 +10,7 @@ import pandas as pd
 # Load data
 # --------------------------------------------------------------------------- #
 
-def load_tier_data(csv_path: str = "numbeo_tiers_usd.csv") -> pd.DataFrame:
+def load_tier_data(csv_path: str = "data/numbeo_tiers_usd.csv") -> pd.DataFrame:
     df = pd.read_csv(csv_path, index_col="city")
     return df
 

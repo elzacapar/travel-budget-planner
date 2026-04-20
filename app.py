@@ -70,7 +70,7 @@ VERDICT_STYLE = {
 
 @st.cache_data
 def get_data():
-    return load_tier_data("numbeo_tiers_usd.csv")
+    return load_tier_data("data/numbeo_tiers_usd.csv")
 
 
 @st.cache_data(ttl=3600)

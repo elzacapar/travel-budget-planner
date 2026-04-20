@@ -40,6 +40,6 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add numbeo_raw.csv numbeo_clean_usd.csv numbeo_tiers_usd.csv || true
+          git add data/numbeo_raw.csv data/numbeo_clean_usd.csv data/numbeo_tiers_usd.csv || true
           git diff --cached --quiet || git commit -m "Auto: data refresh $(date +'%Y-%m-%d')"
           git push

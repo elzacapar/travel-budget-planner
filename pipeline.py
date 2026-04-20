@@ -198,7 +198,7 @@ def run_scraper():
 
     # Resume from existing raw file if present
     try:
-        existing_df = pd.read_csv("numbeo_raw.csv")
+        existing_df = pd.read_csv("data/numbeo_raw.csv")
         done_cities = set(existing_df["city"].tolist())
         results = existing_df.to_dict("records")
         print(f"Resuming — {len(done_cities)} cities already done.\n")
@@ -215,10 +215,10 @@ def run_scraper():
         if result:
             results.append(result)
             # Save after every city so progress is never lost
-            pd.DataFrame(results).to_csv("numbeo_raw.csv", index=False)
+            pd.DataFrame(results).to_csv("data/numbeo_raw.csv", index=False)
         time.sleep(random.uniform(6, 12))  # slightly longer delay for CI
 
-    print(f"Scraped {len(results)}/{len(CITIES)} cities → numbeo_raw.csv\n")
+    print(f"Scraped {len(results)}/{len(CITIES)} cities → data/numbeo_raw.csv\n")
     return pd.DataFrame(results)
 
 # --------------------------------------------------------------------------- #
