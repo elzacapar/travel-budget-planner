@@ -71,7 +71,7 @@ CITY_CURRENCY = {
     "New York": "USD", "Los Angeles": "USD", "Miami": "USD",
     "Chicago": "USD", "San Francisco": "USD", "Cancun": "MXN",
     "Mexico City": "MXN", "Buenos Aires": "USD",
-    "Rio de Janeiro": "BRL", "São Paulo": "BRL",
+    "Rio de Janeiro": "BRL", "Sao Paulo": "BRL",
     "Bogota": "COP", "Lima": "PEN",
     "Toronto": "CAD", "Vancouver": "CAD", "Montreal": "CAD",
     "Mumbai": "INR", "Delhi": "INR", "Bangalore": "INR",
