@@ -241,7 +241,7 @@ def clean(df_raw, currency_map):
 
     # Convert to USD
     for idx, row in df.iterrows():
-        rate = CURRENCY_MAP[row["city"]]
+        rate = currency_map[row["city"]]
         df.loc[idx, price_cols] = row[price_cols] / rate
 
     df.to_csv("numbeo_clean_usd.csv", index=False)
