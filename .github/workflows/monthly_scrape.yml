@@ -25,6 +25,8 @@ jobs:
 
       - name: Run pipeline
         run: python pipeline.py
+        env:
+          EXCHANGERATE_API_KEY: ${{ secrets.EXCHANGERATE_API_KEY }}
 
       - name: Commit results (even if partial)
         if: always()   # runs even if pipeline step failed

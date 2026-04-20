@@ -47,7 +47,7 @@ REGIONS = {
     ],
     "Americas": [
         "New York", "Los Angeles", "Mexico City", "Buenos Aires", "Rio de Janeiro",
-        "Miami", "Chicago", "San Francisco", "Cancun", "São Paulo", "Bogota",
+        "Miami", "Chicago", "San Francisco", "Cancun", "Sao Paulo", "Bogota",
         "Lima", "Toronto", "Vancouver", "Montreal"
     ],
     "South Asia": [

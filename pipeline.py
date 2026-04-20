@@ -45,40 +45,50 @@ URL_OVERRIDES = {
     "Cairo": "Cairo-Egypt",
 }
 
-CURRENCY_MAP = {
-    "Bali": 16000, "Jakarta": 16000,
-    "Ho Chi Minh City": 25000, "Hanoi": 25000,
-    "Bangkok": 33, "Chiang Mai": 33, "Phuket": 33,
-    "Kuala Lumpur": 4.4, "Singapore": 1.35, "Manila": 56,
-    "Phnom Penh": 1.0, "Siem Reap": 1.0,
-    "Tokyo": 150, "Osaka": 150, "Kyoto": 150,
-    "Seoul": 1350, "Beijing": 7.2, "Shanghai": 7.2,
-    "Hong Kong": 7.8, "Macau": 8.0, "Taipei": 32,
-    "Budapest": 360, "Warsaw": 4.0, "Krakow": 4.0,
-    "Bucharest": 4.6, "Sofia": 1.0, "Belgrade": 108,
-    "Zagreb": 0.92, "Tallinn": 0.92, "Riga": 0.92,
-    "Vilnius": 0.92, "Ljubljana": 0.92, "Prague": 23,
-    "Paris": 0.92, "Amsterdam": 0.92, "Barcelona": 0.92,
-    "Madrid": 0.92, "Rome": 0.92, "Milan": 0.92,
-    "Berlin": 0.92, "Vienna": 0.92, "Athens": 0.92,
-    "Brussels": 0.92, "Helsinki": 0.92, "Porto": 0.92,
-    "Lisbon": 0.92, "Dublin": 0.92,
-    "London": 0.79, "Zurich": 0.9, "Geneva": 0.9,
-    "Copenhagen": 6.9, "Stockholm": 10.4, "Oslo": 10.6,
-    "Istanbul": 32, "Antalya": 32, "Dubai": 3.67,
-    "Abu Dhabi": 3.67, "Tel Aviv": 3.7, "Amman": 0.71, "Doha": 3.64,
-    "New York": 1.0, "Los Angeles": 1.0, "Miami": 1.0,
-    "Chicago": 1.0, "San Francisco": 1.0, "Cancun": 17,
-    "Mexico City": 17, "Buenos Aires": 1.0,
-    "Rio de Janeiro": 5.0, "Sao Paulo": 5.0,
-    "Bogota": 4000, "Lima": 3.7,
-    "Toronto": 1.36, "Vancouver": 1.36, "Montreal": 1.36,
-    "Mumbai": 83, "Delhi": 83, "Bangalore": 83,
-    "Colombo": 300, "Kathmandu": 133, "Dhaka": 110,
-    "Sydney": 1.53, "Melbourne": 1.53, "Auckland": 1.65,
-    "Cape Town": 18.5, "Johannesburg": 18.5, "Nairobi": 129,
-    "Marrakech": 10, "Casablanca": 10, "Cairo": 48,
+# Currency codes for each city (ISO 4217)
+CITY_CURRENCY = {
+    "Bali": "IDR", "Jakarta": "IDR",
+    "Ho Chi Minh City": "VND", "Hanoi": "VND",
+    "Bangkok": "THB", "Chiang Mai": "THB", "Phuket": "THB",
+    "Kuala Lumpur": "MYR", "Singapore": "SGD", "Manila": "PHP",
+    "Phnom Penh": "USD", "Siem Reap": "USD",
+    "Tokyo": "JPY", "Osaka": "JPY", "Kyoto": "JPY",
+    "Seoul": "KRW", "Beijing": "CNY", "Shanghai": "CNY",
+    "Hong Kong": "HKD", "Macau": "MOP", "Taipei": "TWD",
+    "Budapest": "HUF", "Warsaw": "PLN", "Krakow": "PLN",
+    "Bucharest": "RON", "Sofia": "EUR", "Belgrade": "RSD",
+    "Zagreb": "EUR", "Tallinn": "EUR", "Riga": "EUR",
+    "Vilnius": "EUR", "Ljubljana": "EUR", "Prague": "CZK",
+    "Paris": "EUR", "Amsterdam": "EUR", "Barcelona": "EUR",
+    "Madrid": "EUR", "Rome": "EUR", "Milan": "EUR",
+    "Berlin": "EUR", "Vienna": "EUR", "Athens": "EUR",
+    "Brussels": "EUR", "Helsinki": "EUR", "Porto": "EUR",
+    "Lisbon": "EUR", "Dublin": "EUR",
+    "London": "GBP", "Zurich": "CHF", "Geneva": "CHF",
+    "Copenhagen": "DKK", "Stockholm": "SEK", "Oslo": "NOK",
+    "Istanbul": "TRY", "Antalya": "TRY", "Dubai": "AED",
+    "Abu Dhabi": "AED", "Tel Aviv": "ILS", "Amman": "JOD", "Doha": "QAR",
+    "New York": "USD", "Los Angeles": "USD", "Miami": "USD",
+    "Chicago": "USD", "San Francisco": "USD", "Cancun": "MXN",
+    "Mexico City": "MXN", "Buenos Aires": "USD",
+    "Rio de Janeiro": "BRL", "São Paulo": "BRL",
+    "Bogota": "COP", "Lima": "PEN",
+    "Toronto": "CAD", "Vancouver": "CAD", "Montreal": "CAD",
+    "Mumbai": "INR", "Delhi": "INR", "Bangalore": "INR",
+    "Colombo": "LKR", "Kathmandu": "NPR", "Dhaka": "BDT",
+    "Sydney": "AUD", "Melbourne": "AUD", "Auckland": "NZD",
+    "Cape Town": "ZAR", "Johannesburg": "ZAR", "Nairobi": "KES",
+    "Marrakech": "MAD", "Casablanca": "MAD", "Cairo": "EGP",
 }
+
+def fetch_currency_map(api_key: str) -> dict:
+    """Fetch live USD rates and build city → rate map."""
+    print("Fetching live exchange rates...")
+    r = requests.get(f"https://v6.exchangerate-api.com/v6/{api_key}/latest/USD")
+    rates = r.json()["conversion_rates"]
+    currency_map = {city: rates[code] for city, code in CITY_CURRENCY.items()}
+    print("Rates fetched.\n")
+    return currency_map
 
 CITY_REGION = {
     "Paris": "Western Europe", "London": "Western Europe", "Amsterdam": "Western Europe",
@@ -215,7 +225,7 @@ def run_scraper():
 # Step 2: Clean
 # --------------------------------------------------------------------------- #
 
-def clean(df_raw):
+def clean(df_raw, currency_map):
     print("=== STEP 2: Cleaning ===")
     df = df_raw.copy()
     price_cols = [c for c in df.columns if c not in
@@ -311,7 +321,15 @@ def build_tiers(df_usd):
 # --------------------------------------------------------------------------- #
 
 if __name__ == "__main__":
-    df_raw  = run_scraper()
-    df_usd  = clean(df_raw)
-    build_tiers(df_usd)
-    print("Pipeline complete.")
+    import os
+    from dotenv import load_dotenv
+    load_dotenv()
+
+    api_key = os.getenv("EXCHANGERATE_API_KEY")
+    currency_map = fetch_currency_map(api_key) if api_key else CURRENCY_MAP_FALLBACK
+
+    df_raw = run_scraper()
+    if len(df_raw) > 0:
+        df_usd = clean(df_raw, currency_map)
+        build_tiers(df_usd)
+        print("Pipeline complete.")
