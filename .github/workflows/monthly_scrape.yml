@@ -1,0 +1,36 @@
+name: Monthly data refresh
+
+on:
+  schedule:
+    - cron: "0 3 1 * *"
+    - cron: "0 3 2 * *"   # retry on the 2nd in case 1st was blocked
+    - cron: "0 3 3 * *"   # retry on the 3rd
+  workflow_dispatch:
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install requests beautifulsoup4 pandas
+
+      - name: Run pipeline
+        run: python pipeline.py
+
+      - name: Commit results (even if partial)
+        if: always()   # runs even if pipeline step failed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add numbeo_raw.csv numbeo_clean_usd.csv numbeo_tiers_usd.csv || true
+          git diff --cached --quiet || git commit -m "Auto: data refresh $(date +'%Y-%m-%d')"
+          git push
