@@ -3,8 +3,8 @@ name: Monthly data refresh
 on:
   schedule:
     - cron: "0 3 1 * *"
-    - cron: "0 3 2 * *"   # retry on the 2nd in case 1st was blocked
-    - cron: "0 3 3 * *"   # retry on the 3rd
+    - cron: "0 3 2 * *"
+    - cron: "0 3 3 * *"
   workflow_dispatch:
 
 permissions:
@@ -17,6 +17,8 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -24,7 +26,7 @@ jobs:
           python-version: "3.11"
 
       - name: Install dependencies
-        run: pip install requests beautifulsoup4 pandas
+        run: pip install requests beautifulsoup4 pandas python-dotenv
 
       - name: Run pipeline
         run: python pipeline.py
@@ -32,7 +34,7 @@ jobs:
           EXCHANGERATE_API_KEY: ${{ secrets.EXCHANGERATE_API_KEY }}
 
       - name: Commit results (even if partial)
-        if: always()   # runs even if pipeline step failed
+        if: always()
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
