@@ -244,8 +244,8 @@ def clean(df_raw, currency_map):
         rate = currency_map[row["city"]]
         df.loc[idx, price_cols] = row[price_cols] / rate
 
-    df.to_csv("numbeo_clean_usd.csv", index=False)
-    print("Cleaned → numbeo_clean_usd.csv\n")
+    df.to_csv("data/numbeo_clean_usd.csv", index=False)
+    print("Cleaned → data/numbeo_clean_usd.csv\n")
     return df
 
 # --------------------------------------------------------------------------- #
@@ -312,8 +312,8 @@ def build_tiers(df_usd):
             df_tiers[f"extras_{tier}"]
         )
 
-    df_tiers.to_csv("numbeo_tiers_usd.csv", index=False)
-    print("Tiers saved → numbeo_tiers_usd.csv\n")
+    df_tiers.to_csv("data/numbeo_tiers_usd.csv", index=False)
+    print("Tiers saved → data/numbeo_tiers_usd.csv\n")
 
 
 # --------------------------------------------------------------------------- #
